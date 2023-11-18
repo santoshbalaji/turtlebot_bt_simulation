@@ -14,6 +14,7 @@ def generate_launch_description():
   launch_file_dir = os.path.join(get_package_share_directory('turtlebot3_gazebo'), 'launch')
    
   pkg_share = FindPackageShare(package='turtlebot_bt_simulation').find('turtlebot_bt_simulation')
+  pkg_share_dir = os.path.join(get_package_share_directory('turtlebot_bt_simulation'), 'launch')
  
   world_file_name = 'playground.world'
   world_path = os.path.join(pkg_share, 'world', world_file_name)
@@ -64,14 +65,14 @@ def generate_launch_description():
 
   spawn_turtlebot_cmd = IncludeLaunchDescription(
       PythonLaunchDescriptionSource(
-          os.path.join(launch_file_dir, 'spawn_turtlebot3.launch.py')
+          os.path.join(pkg_share_dir, 'spawn_turtlebot.launch.py')
       ),
       launch_arguments={
           'x_pose': LaunchConfiguration('x_pose', default='0.0'),
           'y_pose': LaunchConfiguration('y_pose', default='0.0')
       }.items()
   )
- 
+
   ld = LaunchDescription()
  
   ld.add_action(declare_simulator_cmd)
