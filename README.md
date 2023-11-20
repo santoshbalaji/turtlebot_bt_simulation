@@ -20,3 +20,6 @@ This repository is for simulation the actions of turtlebot with behavior trees
 ```
   ros2 launch turtlebot_bt_simulation start_simulation.launch.py
 ```
+
+![Sim](https://github.com/santoshbalaji/turtlebot_bt_simulation/blob/main/docs/sim.png?raw=true)
+![Aruco Marker](https://github.com/santoshbalaji/turtlebot_bt_simulation/blob/main/docs/aruco_marker_in_sim.png?raw=true)
