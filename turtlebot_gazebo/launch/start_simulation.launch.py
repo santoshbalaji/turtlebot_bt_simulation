@@ -1,88 +1,75 @@
 import os
 from launch import LaunchDescription
 from ament_index_python.packages import get_package_share_directory
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
-from launch.conditions import IfCondition, UnlessCondition
+from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import Command, LaunchConfiguration, PythonExpression
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
  
 def generate_launch_description():
- 
-  pkg_gazebo_ros = FindPackageShare(package='gazebo_ros').find('gazebo_ros')
-  launch_file_dir = os.path.join(get_package_share_directory('turtlebot3_gazebo'), 'launch')
-   
-  pkg_share = FindPackageShare(package='turtlebot_gazebo').find('turtlebot_gazebo')
-  pkg_share_dir = os.path.join(get_package_share_directory('turtlebot_gazebo'), 'launch')
- 
-  world_file_name = 'playground.world'
-  world_path = os.path.join(pkg_share, 'world', world_file_name)
-   
-  gazebo_models_path = os.path.join(pkg_share, 'model')
+
+  current_pkg_name = 'turtlebot_gazebo'
+  gazebo_pkg_name = 'gazebo_ros'
+
+  gazebo_ros_pkg_share = FindPackageShare(package=gazebo_pkg_name).find(gazebo_pkg_name)
+  current_pkg_share = FindPackageShare(package=current_pkg_name).find(current_pkg_name)
+
+  # path for turtlebot urdf
+  urdf_path = os.path.join(
+    get_package_share_directory(current_pkg_name), 'urdf', 'turtlebot3_burger.urdf')
+  # path for turtlebot model
+  model_path =  os.path.join(
+    get_package_share_directory(current_pkg_name), 'model', 'turtlebot3_burger', 'model.sdf')
+
+  with open(urdf_path, 'r') as infp:
+    robot_desc = infp.read()
+
+  world_path = os.path.join(current_pkg_share, 'world', 'small_room.world')
+
+  # adding gazebo model path into the environment for the newly created ones
+  gazebo_models_path = os.path.join(current_pkg_share, 'model')
   os.environ["GAZEBO_MODEL_PATH"] = gazebo_models_path
- 
-  headless = LaunchConfiguration('headless')
-  use_sim_time = LaunchConfiguration('use_sim_time')
-  use_simulator = LaunchConfiguration('use_simulator')
-  world = LaunchConfiguration('world')
- 
-  declare_simulator_cmd = DeclareLaunchArgument(
-    name='headless',
-    default_value='False',
-    description='Whether to execute gzclient')
-     
-  declare_use_sim_time_cmd = DeclareLaunchArgument(
-    name='use_sim_time',
-    default_value='true',
-    description='Use simulation (Gazebo) clock if true')
- 
-  declare_use_simulator_cmd = DeclareLaunchArgument(
-    name='use_simulator',
-    default_value='True',
-    description='Whether to start the simulator')
- 
-  declare_world_cmd = DeclareLaunchArgument(
-    name='world',
-    default_value=world_path,
-    description='Full path to the world model file to load')
-    
+
+  # to include gazebo launch file to start the gazebo server
   start_gazebo_server_cmd = IncludeLaunchDescription(
-    PythonLaunchDescriptionSource(os.path.join(pkg_gazebo_ros, 'launch', 'gzserver.launch.py')),
-    condition=IfCondition(use_simulator),
-    launch_arguments={'world': world}.items())
- 
+    PythonLaunchDescriptionSource(os.path.join(gazebo_ros_pkg_share, 'launch', 'gzserver.launch.py')),
+    launch_arguments={'world': world_path}.items())
+
+  # to include gazebo launch file to start the gazebo client
   start_gazebo_client_cmd = IncludeLaunchDescription(
-    PythonLaunchDescriptionSource(os.path.join(pkg_gazebo_ros, 'launch', 'gzclient.launch.py')),
-    condition=IfCondition(PythonExpression([use_simulator, ' and not ', headless])))
-  
-  robot_state_publisher_cmd = IncludeLaunchDescription(
-      PythonLaunchDescriptionSource(
-          os.path.join(launch_file_dir, 'robot_state_publisher.launch.py')
-      ),
-      launch_arguments={'use_sim_time': use_sim_time}.items()
+    PythonLaunchDescriptionSource(os.path.join(gazebo_ros_pkg_share, 'launch', 'gzclient.launch.py')))
+
+  # to publish robot joint states
+  robot_state_publisher_cmd =  Node(
+    package='robot_state_publisher',
+      executable='robot_state_publisher',
+      name='robot_state_publisher',
+      output='screen',
+      parameters=[{
+        'use_sim_time': True,
+        'robot_description': robot_desc
+      }],
   )
 
-  spawn_turtlebot_cmd = IncludeLaunchDescription(
-      PythonLaunchDescriptionSource(
-          os.path.join(pkg_share_dir, 'spawn_turtlebot.launch.py')
-      ),
-      launch_arguments={
-          'x_pose': LaunchConfiguration('x_pose', default='0.0'),
-          'y_pose': LaunchConfiguration('y_pose', default='0.0')
-      }.items()
+  # to spawn turtlebot model in gazebo
+  start_gazebo_ros_spawner_cmd = Node(
+    package='gazebo_ros',
+    executable='spawn_entity.py',
+    arguments=[
+        '-entity', 'turtlebot3_burger',
+        '-file', model_path,
+        '-x', '2.00',
+        '-y', '0.00',
+        '-z', '0.01'
+    ],
+    output='screen',
   )
 
   ld = LaunchDescription()
- 
-  ld.add_action(declare_simulator_cmd)
-  ld.add_action(declare_use_sim_time_cmd)
-  ld.add_action(declare_use_simulator_cmd)
-  ld.add_action(declare_world_cmd)
- 
+
   ld.add_action(start_gazebo_server_cmd)
   ld.add_action(start_gazebo_client_cmd)
   ld.add_action(robot_state_publisher_cmd)
-  ld.add_action(spawn_turtlebot_cmd)
- 
+  ld.add_action(start_gazebo_ros_spawner_cmd)
+
   return ld

@@ -11,24 +11,10 @@ endif()
 
 find_package(ament_cmake REQUIRED)
 find_package(gazebo_ros REQUIRED)
+find_package(robot_state_publisher)
 
 install(
-  DIRECTORY launch
-  DESTINATION share/${PROJECT_NAME}
-)
-
-install(
-  DIRECTORY world
-  DESTINATION share/${PROJECT_NAME}
-)
-
-install(
-  DIRECTORY model
-  DESTINATION share/${PROJECT_NAME}
-)
-
-install(
-  DIRECTORY rviz
+  DIRECTORY launch world model rviz urdf
   DESTINATION share/${PROJECT_NAME}
 )
 
