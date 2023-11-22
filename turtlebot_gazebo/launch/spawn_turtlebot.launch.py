@@ -9,7 +9,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
     # Get the urdf file
     urdf_path = os.path.join(
-        get_package_share_directory('turtlebot_bt_simulation'),
+        get_package_share_directory('turtlebot_gazebo'),
         'model',
         'turtlebot3_burger',
         'model.sdf'

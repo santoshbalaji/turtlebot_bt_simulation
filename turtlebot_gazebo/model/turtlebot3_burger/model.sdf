@@ -316,6 +316,17 @@
     </link>
 
     <link name='camera_link'>
+      <inertial>
+        <mass>0.001</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>0.000</ixy>
+          <ixz>0.000</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0.000</iyz>
+          <izz>0.001</izz>
+        </inertia>
+      </inertial>
 
       <collision name="camera_collision">
         <geometry>

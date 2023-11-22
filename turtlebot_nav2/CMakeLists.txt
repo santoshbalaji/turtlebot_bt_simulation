@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(turtlebot_bt_simulation)
+project(turtlebot_nav2)
 
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)
@@ -13,22 +13,17 @@ find_package(ament_cmake REQUIRED)
 find_package(gazebo_ros REQUIRED)
 
 install(
-  DIRECTORY launch
-  DESTINATION share/${PROJECT_NAME}
-)
-
-install(
-  DIRECTORY world
-  DESTINATION share/${PROJECT_NAME}
-)
-
-install(
-  DIRECTORY model
+  DIRECTORY config
   DESTINATION share/${PROJECT_NAME}
 )
 
 install(
   DIRECTORY rviz
+  DESTINATION share/${PROJECT_NAME}
+)
+
+install(
+  DIRECTORY launch
   DESTINATION share/${PROJECT_NAME}
 )
 

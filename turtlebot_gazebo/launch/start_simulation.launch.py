@@ -13,13 +13,13 @@ def generate_launch_description():
   pkg_gazebo_ros = FindPackageShare(package='gazebo_ros').find('gazebo_ros')
   launch_file_dir = os.path.join(get_package_share_directory('turtlebot3_gazebo'), 'launch')
    
-  pkg_share = FindPackageShare(package='turtlebot_bt_simulation').find('turtlebot_bt_simulation')
-  pkg_share_dir = os.path.join(get_package_share_directory('turtlebot_bt_simulation'), 'launch')
+  pkg_share = FindPackageShare(package='turtlebot_gazebo').find('turtlebot_gazebo')
+  pkg_share_dir = os.path.join(get_package_share_directory('turtlebot_gazebo'), 'launch')
  
   world_file_name = 'playground.world'
   world_path = os.path.join(pkg_share, 'world', world_file_name)
    
-  gazebo_models_path = os.path.join(pkg_share, 'models')
+  gazebo_models_path = os.path.join(pkg_share, 'model')
   os.environ["GAZEBO_MODEL_PATH"] = gazebo_models_path
  
   headless = LaunchConfiguration('headless')
