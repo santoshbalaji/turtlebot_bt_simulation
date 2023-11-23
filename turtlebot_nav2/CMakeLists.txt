@@ -10,20 +10,9 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 find_package(ament_cmake REQUIRED)
-find_package(gazebo_ros REQUIRED)
 
 install(
-  DIRECTORY config
-  DESTINATION share/${PROJECT_NAME}
-)
-
-install(
-  DIRECTORY rviz
-  DESTINATION share/${PROJECT_NAME}
-)
-
-install(
-  DIRECTORY launch
+  DIRECTORY config rviz map launch
   DESTINATION share/${PROJECT_NAME}
 )
 

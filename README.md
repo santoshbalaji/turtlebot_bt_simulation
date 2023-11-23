@@ -1,25 +1,34 @@
 # turtlebot_bt_simulation
-This repository is for simulation the actions of turtlebot with behavior trees
+This repository is for simulating actions of turtlebot with behavior trees
 
 ## Dependencies involved
 - [ ] robot_state_publisher
+- [ ] gazebo_ros
+- [ ] slam_toolbox
 
 ## Install dependencies
+- To install dependencies for turtlebot_gazebo package
 ```
-  rosdep install --from-paths src/turtlebot_bt_simulation -y --ignore-src
+  rosdep install --from-paths src/turtlebot_gazebo -y --ignore-src
+```
+
+- To install dependencies for turtlebot_nav2 package
+```
+  rosdep install --from-paths src/turtlebot_nav2 -y --ignore-src
 ```
 
 ## Build and Execution
 - To build the package
-
 ```
-  colcon build --packages-select turtlebot_bt_simulation
-```
-
-- To visualize the robot in rviz
-```
-  ros2 launch turtlebot_bt_simulation start_simulation.launch.py
+  colcon build --symlink-install
 ```
 
-![Sim](https://github.com/santoshbalaji/turtlebot_bt_simulation/blob/main/docs/sim.png?raw=true)
-![Aruco Marker](https://github.com/santoshbalaji/turtlebot_bt_simulation/blob/main/docs/aruco_marker_in_sim.png?raw=true)
+- To start simulation
+```
+  ros2 launch turtlebot_gazebo start_simulation.launch.py
+```
+
+- To start mapping with slam_toolbox
+```
+  ros2 launch turtlebot_nav2 start_mapping.launch.py
+```

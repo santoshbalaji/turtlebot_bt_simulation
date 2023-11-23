@@ -9,59 +9,40 @@ from ament_index_python.packages import get_package_share_directory
 
 
 def generate_launch_description():
-  use_sim_time = LaunchConfiguration('use_sim_time')
-  slam_params_file = LaunchConfiguration('slam_params_file')
+  current_pkg_name = 'turtlebot_nav2'
 
-  rviz_config_file = PathJoinSubstitution(
-      [FindPackageShare("turtlebot_nav2"), "rviz", "view_robot.rviz"]
-  )
- 
-  declare_use_sim_time_argument = DeclareLaunchArgument(
-      'use_sim_time',
-      default_value='true',
-      description='Use simulation/Gazebo clock')
+  # path for rviz config file
+  rviz_config_path = PathJoinSubstitution([FindPackageShare(current_pkg_name), "rviz", "view_robot.rviz"])
+  # path for slam config file
+  slam_mapping_config_path = PathJoinSubstitution([FindPackageShare(current_pkg_name), "config", "mapping.yaml"])
 
-  declare_slam_params_file_cmd = DeclareLaunchArgument(
-      'slam_params_file',
-      default_value=os.path.join(get_package_share_directory("turtlebot_nav2"),
-                                'config',
-                                'mapping.yaml'),
-      description='Full path to the ROS2 parameters file to use for the slam_toolbox node')
-
+  # node for starting slam toolbox
+  # it starts in mapping mode if map topic is not giving any map
   start_async_slam_toolbox_node = Node(
       parameters=[
-        slam_params_file,
-        {'use_sim_time': use_sim_time},
+        slam_mapping_config_path,
+        {'use_sim_time': True},
       ],
       package='slam_toolbox',
       executable='async_slam_toolbox_node',
       name='slam_toolbox',
-      output='log')
+      output='screen')
   
+  # node for starting rviz
   rviz_node = Node(
     parameters=[
-      {'use_sim_time': use_sim_time},
+      {'use_sim_time': True},
     ],
     package="rviz2",
     executable="rviz2",
     name="rviz2",
-    output="log",
-    arguments=["-d", rviz_config_file],
-  )
-
-  teleop_keyboard_node = Node(
-    package="teleop_twist_keyboard",
-    executable="teleop_twist_keyboard",
-    name="teleop_twist_keyboard",
-    output='screen'
+    output="screen",
+    arguments=["-d", rviz_config_path],
   )
 
   ld = LaunchDescription()
 
-  ld.add_action(declare_use_sim_time_argument)
-  ld.add_action(declare_slam_params_file_cmd)
   ld.add_action(start_async_slam_toolbox_node)
   ld.add_action(rviz_node)
-  ld.add_action(teleop_keyboard_node)
 
   return ld
