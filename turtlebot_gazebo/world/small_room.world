@@ -642,12 +642,12 @@
       <pose>0.482763 -0.324437 0 -0.005177 -0.026672 1.5737</pose>
     </model>
     <state world_name='default'>
-      <sim_time>475 175000000</sim_time>
-      <real_time>476 625239689</real_time>
-      <wall_time>1700637791 676086463</wall_time>
-      <iterations>475175</iterations>
+      <sim_time>5283 891000000</sim_time>
+      <real_time>4818 711771318</real_time>
+      <wall_time>1701078103 286963873</wall_time>
+      <iterations>4808716</iterations>
       <model name='DeskChair'>
-        <pose>-0.484024 -0.351488 0 -0.005177 -0.026672 1.5737</pose>
+        <pose>-0.484024 -0.351488 0 -0.005178 -0.026672 1.5737</pose>
         <scale>1 1 1</scale>
         <link name='link'>
           <pose>-0.484024 -0.351488 0 -0.026672 0.005176 -3.13882</pose>
@@ -707,27 +707,37 @@
         </link>
       </model>
       <model name='Sofa'>
-        <pose>-4.70076 3.70988 0.000118 -2e-06 -1e-06 0</pose>
+        <pose>-4.70076 3.70988 0.000117 -5e-06 2e-06 -0</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>-4.70076 3.70988 0.000118 -1e-06 2e-06 1.5708</pose>
+          <pose>-4.70076 3.70988 0.000117 2e-06 5e-06 1.5708</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 -9.8 0 -0 0</acceleration>
-          <wrench>0 0 -9.8 0 -0 0</wrench>
+          <acceleration>-0.000138 0.000264 -7.11596 -2.2343 -1.1251 -4e-06</acceleration>
+          <wrench>-0.000138 0.000264 -7.11596 0 -0 0</wrench>
         </link>
       </model>
       <model name='Sofa_clone'>
-        <pose>-4.52224 -4.04998 0.00012 0 1e-06 0</pose>
+        <pose>-4.52224 -4.04998 0.00012 0 -0 0</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose>-4.52224 -4.04998 0.00012 1e-06 -0 1.5708</pose>
+          <pose>-4.52224 -4.04998 0.00012 0 -0 1.5708</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0.000488 6e-06 0.20241 3.09534 -0.911975 -3.14159</acceleration>
-          <wrench>0.000488 6e-06 0.20241 0 -0 0</wrench>
+          <acceleration>0 0 -9.8 -0 -0 -0</acceleration>
+          <wrench>0 0 -9.8 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='aruco_marker'>
+        <pose>-0.969965 5.47206 0.168815 2.4e-05 1.9e-05 -1.54797</pose>
+        <scale>1 2.18379 2.25093</scale>
+        <link name='link'>
+          <pose>-0.969965 5.47206 0.168815 2.4e-05 1.9e-05 -1.54797</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>-1.41977 -0.032153 -8.14527 -2.8913 1.02488 3.1294</acceleration>
+          <wrench>-0.00142 -3.2e-05 -0.008145 0 -0 0</wrench>
         </link>
       </model>
       <model name='building_plan_small'>
-        <pose>0.633579 -0.101388 0 0 -0 0</pose>
+        <pose>0.63358 -0.10139 0 0 -0 0</pose>
         <scale>1 1 1</scale>
         <link name='Wall_0'>
           <pose>4.13358 -5.77639 0 0 -0 0</pose>
@@ -776,10 +786,74 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose>-3.48565 -14.3564 47.687 -0 1.1138 1.41221</pose>
+        <pose>-3.80682 -3.76404 19.6652 0 1.0938 0.78421</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
     </gui>
+    <model name='aruco_marker'>
+      <link name='link'>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>0.001</mass>
+          <inertia>
+            <ixx>3.75e-06</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1.875e-06</iyy>
+            <iyz>0</iyz>
+            <izz>1.875e-06</izz>
+          </inertia>
+        </inertial>
+        <visual name='front_visual'>
+          <pose>5e-05 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.0001 0.15 0.15</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://aruco_marker/materials/scripts</uri>
+              <uri>model://aruco_marker/materials/textures</uri>
+              <name>Marker</name>
+            </script>
+          </material>
+        </visual>
+        <visual name='rear_visual'>
+          <pose>-5e-05 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.0001 0.15 0.15</size>
+            </box>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.0001 0.15 0.15</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-0.965829 5.28995 0 0 -0 0</pose>
+    </model>
   </world>
 </sdf>
