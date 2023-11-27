@@ -93,6 +93,8 @@ bt_navigator:
     - nav2_goal_checker_selector_bt_node
     - nav2_is_battery_charging_condition_bt_node
     - nav2_feature_detection_bt_node
+    - nav2_aruco_tracking_action_bt_node
+    - nav2_aruco_detection_action_bt_node
 
 bt_navigator_rclcpp_node:
   ros__parameters:
